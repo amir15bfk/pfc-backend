@@ -39,12 +39,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'api_basic.apps.ApiBasicConfig',
-    'authentication.apps.AuthenticationConfig',
+    'authentication',
     'rest_framework'
 ]
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'authentication.backends.JWTAuthentication'
+        'authentication.backends.JWTAuthentication',
     )
 }
 MIDDLEWARE = [
@@ -130,4 +130,4 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY')
+JWT_SECRET_KEY ="hhhhh" #os.environ.get('JWT_SECRET_KEY')
