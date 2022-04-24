@@ -1,6 +1,6 @@
 import imp
 from django.shortcuts import render
-from django.http import HttpResponse,JsonResponse
+from django.http import HttpResponse,JsonResponse, request
 from rest_framework.parsers import JSONParser
 from .models import Appointment
 from .serializers import AppointmentSerializer
@@ -9,7 +9,15 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
+from rest_framework import generics
+from rest_framework import mixins
 # Create your views here.
+class GenericAPIView(generics.GenericAPIView,mixins.ListModelMixin):
+    serializer_class = AppointmentSerializer
+    queryset = Appointment.objects.all()
+
+    def get(self,request):
+        return self.list(request)
 
 
 class AppointemtAPIView(APIView):
@@ -24,6 +32,32 @@ class AppointemtAPIView(APIView):
             serializer.save()
             return Response(serializer.data,status=status.HTTP_201_CREATED)
         return Response(serializer.errors,status= status.HTTP_400_BAD_REQUEST) 
+
+class AppointmentDetail(APIView):
+    def get_object(self,pk):
+        try:
+            return Appointment.objects.get(pk=pk)
+        except Appointment.DoesNotExist:
+            return HttpResponse(status=status.HTTP_404_NOT_FOUND)
+    def get(self,request,pk):
+        appointment = self.get_object(pk)
+        serializer= AppointmentSerializer(appointment)
+        return Response(serializer.data)
+    
+    def put(self,request,pk):
+        appointment=self.get_object(pk)
+        serializer = AppointmentSerializer(appointment,data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors,status= status.HTTP_400_BAD_REQUEST)
+
+    def delete(self,requsest,pk):
+        appointment = self.get_object(pk)
+        appointment.delete()
+        return HttpResponse(status=status.HTTP_204_NO_CONTENT)
+
+
 
 @api_view(['GET','POST'])
 def appointment_list(request):
