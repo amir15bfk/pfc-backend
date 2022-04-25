@@ -6,7 +6,7 @@ from .models import Appointment
 class AppointmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Appointment
-        fields = "__all__"
+        fields = ["title","id","description","date","importance"]
     # title = serializers.CharField(max_length=50)
     # description = serializers.CharField(max_length=200)
     # date = serializers.DateTimeField()

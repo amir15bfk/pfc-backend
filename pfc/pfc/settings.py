@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'api_basic.apps.ApiBasicConfig',
     'authentication',
-    'rest_framework'
+    'rest_framework',
+    'drf_yasg',
 ]
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (

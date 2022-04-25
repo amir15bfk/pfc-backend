@@ -1,3 +1,4 @@
+from cgitb import lookup
 import imp
 from re import A
 from django.shortcuts import render
@@ -23,50 +24,70 @@ from rest_framework import permissions
 #         return self.list(request)
 
 
-class AppointemtAPIView(APIView):
-    permission_classes =(permissions.IsAuthenticated,) 
-    def get(self,request):
-        appointment = Appointment.objects.filter(owner=request.user)
-        serializer = AppointmentSerializer(appointment,many=True)
-        return Response(serializer.data)
+# class AppointemtAPIView(APIView):
+#serializer_class = AppointmentSerializer
+#     lookup_field = "id"
+#     permission_classes =(permissions.IsAuthenticated,) 
+#     def get(self,request):
+#         appointment = Appointment.objects.filter(owner=request.user)
+#         serializer = AppointmentSerializer(appointment,many=True)
+#         return Response(serializer.data)
 
-    def post(self,request):
-        serializer = AppointmentSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save(owner=request.user)
-            return Response(serializer.data,status=status.HTTP_201_CREATED)
-        return Response(serializer.errors,status= status.HTTP_400_BAD_REQUEST) 
+#     def post(self,request):
+#         serializer = AppointmentSerializer(data=request.data)
+#         if serializer.is_valid():
+#             serializer.save(owner=request.user)
+#             return Response(serializer.data,status=status.HTTP_201_CREATED)
+#         return Response(serializer.errors,status= status.HTTP_400_BAD_REQUEST) 
+class AppointemtAPIView(generics.ListCreateAPIView):
 
-class AppointmentDetail(APIView):
-    permission_classes =(permissions.IsAuthenticated,) 
-    def get_object(self,pk):
-        try:
-            return Appointment.objects.get(pk=pk,owner =self.request.user)
-        except Appointment.DoesNotExist:
-            return HttpResponse(status=status.HTTP_404_NOT_FOUND)
-    def get(self,request,pk):
-        appointment = self.get_object(pk)
-        if isinstance(appointment,HttpResponse):
-            return appointment
-        serializer= AppointmentSerializer(appointment)
-        return Response(serializer.data)
+    serializer_class = AppointmentSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
+    def get_queryset(self):
+        return Appointment.objects.filter(owner=self.request.user)
+class AppointmentDetail(generics.RetrieveUpdateDestroyAPIView):
+
+    serializer_class = AppointmentSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+    lookup_field = "id"
+
+    def get_queryset(self):
+        return Appointment.objects.filter(owner=self.request.user)
+# class AppointmentDetail(APIView):
+#     lookup_field = "id"
+#     permission_classes =(permissions.IsAuthenticated,) 
+#     def get_object(self,pk):
+#         try:
+#             return Appointment.objects.get(pk=pk,owner =self.request.user)
+#         except Appointment.DoesNotExist:
+#             return HttpResponse(status=status.HTTP_404_NOT_FOUND)
+#     def get(self,request,pk):
+#         appointment = self.get_object(pk)
+#         if isinstance(appointment,HttpResponse):
+#             return appointment
+#         serializer= AppointmentSerializer(appointment)
+#         return Response(serializer.data)
     
-    def put(self,request,pk):
-        appointment=self.get_object(pk)
-        if isinstance(appointment,HttpResponse):
-            return appointment
-        serializer = AppointmentSerializer(appointment,data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors,status= status.HTTP_400_BAD_REQUEST)
+#     def put(self,request,pk):
+#         appointment=self.get_object(pk)
+#         if isinstance(appointment,HttpResponse):
+#             return appointment
+#         serializer = AppointmentSerializer(appointment,data=request.data)
+#         if serializer.is_valid():
+#             serializer.save(owner=request.user)
+#             return Response(serializer.data)
+#         return Response(serializer.errors,status= status.HTTP_400_BAD_REQUEST)
 
-    def delete(self,requsest,pk):
-        appointment = self.get_object(pk)
-        if isinstance(appointment,HttpResponse):
-            return appointment
-        appointment.delete()
-        return HttpResponse(status=status.HTTP_204_NO_CONTENT)
+#     def delete(self,requsest,pk):
+#         appointment = self.get_object(pk)
+#         if isinstance(appointment,HttpResponse):
+#             return appointment
+#         appointment.delete()
+#         return HttpResponse(status=status.HTTP_204_NO_CONTENT)
 
 
 
