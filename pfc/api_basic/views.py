@@ -53,7 +53,6 @@ class AppointmentDetail(generics.RetrieveUpdateDestroyAPIView):
 
     serializer_class = AppointmentSerializer
     permission_classes = (permissions.IsAuthenticated,)
-    lookup_field = "id"
 
     def get_queryset(self):
         return Appointment.objects.filter(owner=self.request.user)
