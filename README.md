@@ -19,7 +19,7 @@ python manage.py migrate
 ## start server
 ```
 cd pfc
-python manage.py startserver 1.1.1.1:8000
+python manage.py runserver 1.1.1.1:8000
 ```
 ## create superuser (admin) to entre the admin panel
 ```
