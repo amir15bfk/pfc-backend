@@ -49,6 +49,36 @@ class AppointemtAPIView(generics.ListCreateAPIView):
 
     def get_queryset(self):
         return Appointment.objects.filter(owner=self.request.user)
+class AppointemtAPIViewWithYear(generics.ListCreateAPIView):
+
+    serializer_class = AppointmentSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
+    def get_queryset(self):
+        return Appointment.objects.filter(owner=self.request.user,date__year=self.kwargs['year'])
+class AppointemtAPIViewWithMonth(generics.ListCreateAPIView):
+
+    serializer_class = AppointmentSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
+    def get_queryset(self):
+        return Appointment.objects.filter(owner=self.request.user,date__year=self.kwargs['year'],date__month=self.kwargs['month'])
+class AppointemtAPIViewWithDay(generics.ListCreateAPIView):
+
+    serializer_class = AppointmentSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
+    def get_queryset(self):
+        return Appointment.objects.filter(owner=self.request.user,date__year=self.kwargs['year'],date__month=self.kwargs['month'],date__day=self.kwargs['day']).order_by('date')
 class AppointmentDetail(generics.RetrieveUpdateDestroyAPIView):
 
     serializer_class = AppointmentSerializer
