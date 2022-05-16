@@ -1,2 +1,7 @@
 venv 
 pfc/db.sqlite3
+pfc/pfc/__pycache__
+pfc/api_basic/__pycache__
+pfc/authentication/__pycache__
+pfc/api_basic/migrations/__pycache__
+pfc/authentication/migrations/__pycache__
