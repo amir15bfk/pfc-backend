@@ -48,7 +48,7 @@ class AppointemtAPIView(generics.ListCreateAPIView):
         serializer.save(owner=self.request.user)
 
     def get_queryset(self):
-        return Appointment.objects.filter(owner=self.request.user)
+        return Appointment.objects.filter(owner=self.request.user).order_by('date','start_time','end_time')
 class AppointemtAPIViewWithYear(generics.ListCreateAPIView):
 
     serializer_class = AppointmentSerializer
@@ -59,7 +59,7 @@ class AppointemtAPIViewWithYear(generics.ListCreateAPIView):
 
     def get_queryset(self):
         return Appointment.objects.filter(owner=self.request.user,
-        date__year=self.kwargs['year']).order_by('date')
+        date__year=self.kwargs['year']).order_by('date','start_time','end_time')
 class AppointemtAPIViewWithMonth(generics.ListCreateAPIView):
 
     serializer_class = AppointmentSerializer
@@ -71,7 +71,7 @@ class AppointemtAPIViewWithMonth(generics.ListCreateAPIView):
     def get_queryset(self):
         return Appointment.objects.filter(owner=self.request.user,
         date__year=self.kwargs['year'],
-        date__month=self.kwargs['month']).order_by('date')
+        date__month=self.kwargs['month']).order_by('date','start_time','end_time')
 class AppointemtAPIViewWithDay(generics.ListCreateAPIView):
 
     serializer_class = AppointmentSerializer
@@ -84,7 +84,7 @@ class AppointemtAPIViewWithDay(generics.ListCreateAPIView):
         return Appointment.objects.filter(owner=self.request.user,
         date__year=self.kwargs['year'],
         date__month=self.kwargs['month'],
-        date__day=self.kwargs['day']).order_by('date')
+        date__day=self.kwargs['day']).order_by('date','start_time','end_time')
 class AppointmentDetail(generics.RetrieveUpdateDestroyAPIView):
 
     serializer_class = AppointmentSerializer
