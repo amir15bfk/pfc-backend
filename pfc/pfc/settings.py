@@ -46,7 +46,8 @@ INSTALLED_APPS = [
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'authentication.backends.JWTAuthentication',
-    )
+    ),
+    'TIME_FORMAT':'%I:%M %p',
 }
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
