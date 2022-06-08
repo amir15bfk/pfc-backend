@@ -16,11 +16,16 @@ class RegisterView(GenericAPIView):
 
     def post(self, request):
         serializer = UserSerializer(data=request.data)
-        if serializer.is_valid():
+        short_password = True if len(request.data.get('password',''))<8 else False
+        if serializer.is_valid() and not short_password:
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        err = serializer.errors
+        if short_password:
+            if not err['password'] :
+                err['password']=["Your password must be more then 8 characters"]
+                
+        return Response(err, status=status.HTTP_400_BAD_REQUEST)
 
 
 class LoginView(GenericAPIView):
