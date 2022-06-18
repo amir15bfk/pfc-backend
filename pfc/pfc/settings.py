@@ -46,7 +46,11 @@ INSTALLED_APPS = [
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'authentication.backends.JWTAuthentication',
-    )
+    ),
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '15/day',
+        'user': '1000/day'
+    }
 }
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
