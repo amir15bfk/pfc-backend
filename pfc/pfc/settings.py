@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'api_basic.apps.ApiBasicConfig',
     'authentication',
+    'adminPann',
     'rest_framework',
     'drf_yasg',
 ]

@@ -5,3 +5,5 @@ pfc/api_basic/__pycache__
 pfc/authentication/__pycache__
 pfc/api_basic/migrations/__pycache__
 pfc/authentication/migrations/__pycache__
+pfc/adminPann/__pycache__
+pfc/adminPann/migrations/__pycache__
