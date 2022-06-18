@@ -6,6 +6,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.contrib import auth
 from django.conf import settings
+import datetime
+import timezone
 import jwt
 # Create your views here.
 
@@ -39,7 +41,9 @@ class LoginView(GenericAPIView):
 
         if user:
             auth_token = jwt.encode(
-                {'username': user.username}, settings.JWT_SECRET_KEY, algorithm="HS256")
+                {'username': user.username,
+                "exp": datetime.datetime.now(tz=timezone.utc) + datetime.timedelta(days=3)},
+                 settings.JWT_SECRET_KEY, algorithm="HS256")
 
             serializer = UserSerializer(user)
 
